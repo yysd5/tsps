@@ -1,12 +1,12 @@
 [package]
 name = "tsps"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2024"
 description = "Quickly set up tmux workspaces by splitting windows into multiple panes"
 license = "MIT"
-repository = "https://github.com/yyossy5/tsps"
+repository = "https://github.com/yysd5/tsps"
 authors = ["yyossy5 <hm.hr.yossy@gmail.com>"]
-homepage = "https://github.com/yyossy5/tsps"
+homepage = "https://github.com/yysd5/tsps"
 readme = "README.md"
 keywords = ["tmux", "cli", "terminal", "workspace"]
 categories = ["command-line-utilities"]
