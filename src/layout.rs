@@ -182,23 +182,24 @@ impl LayoutConfig {
         // Second pass: adjust row heights by resizing the first horizontal split
         // Find the first pane with horizontal split (usually the terminal pane)
         for (index, pane) in self.panes.iter().enumerate() {
-            if pane.split.as_deref() == Some("horizontal") && pane.size.is_some() {
-                let size = pane.size.as_ref().unwrap();
-                if size.ends_with('%') {
-                    let percentage = size.trim_end_matches('%');
-                    // This controls the overall top/bottom ratio
-                    Command::new("tmux")
-                        .args([
-                            "resize-pane",
-                            "-t",
-                            &index.to_string(),
-                            "-y",
-                            &format!("{}%", percentage),
-                        ])
-                        .status()
-                        .map_err(|e| {
-                            format!("Failed to adjust row height for pane {}: {}", index, e)
-                        })?;
+            if pane.split.as_deref() == Some("horizontal") {
+                if let Some(size) = &pane.size {
+                    if size.ends_with('%') {
+                        let percentage = size.trim_end_matches('%');
+                        // This controls the overall top/bottom ratio
+                        Command::new("tmux")
+                            .args([
+                                "resize-pane",
+                                "-t",
+                                &index.to_string(),
+                                "-y",
+                                &format!("{}%", percentage),
+                            ])
+                            .status()
+                            .map_err(|e| {
+                                format!("Failed to adjust row height for pane {}: {}", index, e)
+                            })?;
+                    }
                 }
                 break; // Only adjust the first horizontal split
             }
