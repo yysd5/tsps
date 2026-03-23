@@ -19,6 +19,10 @@ struct Cli {
     #[arg(short, long, value_name = "DIRECTORY")]
     directory: Option<PathBuf>,
 
+    /// Delay before executing commands in milliseconds
+    #[arg(short = 'D', long, value_name = "MS", default_value = "2000")]
+    delay: u64,
+
     /// Remaining arguments for traditional usage (pane_count and directory)
     #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
     args: Vec<String>,
@@ -35,7 +39,7 @@ fn main() {
 
     // If layout file is specified
     if let Some(layout_file) = cli.layout {
-        match apply_layout_file(&layout_file, cli.directory.as_ref()) {
+        match apply_layout_file(&layout_file, cli.directory.as_ref(), cli.delay) {
             Ok(()) => return,
             Err(e) => {
                 eprintln!("Error: Failed to apply layout: {}", e);
@@ -125,6 +129,7 @@ fn main() {
 fn apply_layout_file(
     layout_file: &PathBuf,
     override_directory: Option<&PathBuf>,
+    delay: u64,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let mut layout = LayoutConfig::from_file(layout_file)?;
 
@@ -133,6 +138,6 @@ fn apply_layout_file(
         layout.workspace.directory = dir.to_string_lossy().to_string();
     }
 
-    layout.apply_to_tmux()?;
+    layout.apply_to_tmux(delay)?;
     Ok(())
 }

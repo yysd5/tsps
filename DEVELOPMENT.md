@@ -8,7 +8,7 @@
 ## Building from source
 
 ```bash
-git clone https://github.com/yyossy5/tsps.git
+git clone https://github.com/yysd5/tsps.git
 cd tsps
 cargo build --release
 ```

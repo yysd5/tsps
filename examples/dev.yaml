@@ -11,12 +11,12 @@ panes:
       - "nvim ."
     focus: true
 
-  # Claude Code (top-right, smaller)
-  - id: "claude"
+  # Gemini CLI (top-right, smaller)
+  - id: "gemini"
     split: "vertical"
     size: "38%"
     commands:
-      - "claude"
+      - "gemini"
 
   # General terminal (bottom-left)
   - id: "terminal"

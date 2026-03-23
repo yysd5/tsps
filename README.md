@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/tsps)](https://crates.io/crates/tsps)
 [![Downloads](https://img.shields.io/crates/d/tsps)](https://crates.io/crates/tsps)
-[![License](https://img.shields.io/crates/l/tsps)](https://github.com/yyossy5/tsps/blob/main/LICENSE)
+[![License](https://img.shields.io/crates/l/tsps)](https://github.com/yysd5/tsps/blob/main/LICENSE)
 
 Quickly set up your tmux workspace by splitting a window into multiple panes at a specified directory with a single command.
 
@@ -34,7 +34,7 @@ cargo install tsps
 
 ```bash
 # Download the latest release
-curl -L https://github.com/yyossy5/tsps/releases/latest/download/tsps-aarch64-apple-darwin -o tsps
+curl -L https://github.com/yysd5/tsps/releases/latest/download/tsps-aarch64-apple-darwin -o tsps
 
 # Make it executable
 chmod +x tsps
@@ -74,6 +74,9 @@ tsps --layout examples/dev.yaml --directory /path/to/different/project
 
 # Short form with directory override
 tsps -l examples/dev.yaml -d /path/to/project
+
+# Adjust the delay before executing commands (in milliseconds, default: 2000)
+tsps -l examples/dev.yaml --delay 3000
 ```
 
 #### Example Layout File
@@ -138,6 +141,18 @@ tsps -l ~/layouts/dev.yaml -d ~/projects/mobile
 
 This is particularly useful when you have standardized development workflows but work on multiple projects.
 
+#### Command Execution Delay
+
+If your environment causes commands to fail or display incorrectly, you can increase the delay before commands are executed:
+
+```bash
+# Wait for 3 seconds instead of the default 2 seconds
+tsps -l ~/layouts/dev.yaml --delay 3000
+```
+
+The default delay is 2000ms (2 seconds), which should be sufficient for most environments.
+Increase this value if you find that commands are being sent before the shell is ready.
+
 #### Size Specification Examples
 
 ```yaml
@@ -176,7 +191,7 @@ cargo install-update tsps
 
 ```bash
 # Download the latest release
-curl -L https://github.com/yyossy5/tsps/releases/latest/download/tsps-aarch64-apple-darwin -o tsps
+curl -L https://github.com/yysd5/tsps/releases/latest/download/tsps-aarch64-apple-darwin -o tsps
 
 # Make it executable
 chmod +x tsps
