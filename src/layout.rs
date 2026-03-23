@@ -43,7 +43,7 @@ impl LayoutConfig {
     }
 
     /// Apply layout to tmux
-    pub fn apply_to_tmux(&self) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn apply_to_tmux(&self, delay: u64) -> Result<(), Box<dyn std::error::Error>> {
         // Check if directory exists
         let target_dir = Path::new(&self.workspace.directory);
         if !target_dir.exists() {
@@ -69,7 +69,7 @@ impl LayoutConfig {
         self.adjust_pane_sizes()?;
 
         // Execute commands in each pane
-        self.execute_commands()?;
+        self.execute_commands(delay)?;
 
         // Set focus
         self.set_focus()?;
@@ -118,8 +118,8 @@ impl LayoutConfig {
 
     /// Adjust pane sizes after layout is applied
     fn adjust_pane_sizes(&self) -> Result<(), Box<dyn std::error::Error>> {
-        // Wait a moment for layout to settle
-        std::thread::sleep(std::time::Duration::from_millis(100));
+        // Wait for layout to settle
+        std::thread::sleep(std::time::Duration::from_millis(500));
 
         // First pass: adjust individual pane sizes
         for (index, pane) in self.panes.iter().enumerate() {
@@ -208,12 +208,22 @@ impl LayoutConfig {
     }
 
     /// Execute commands in each pane
-    fn execute_commands(&self) -> Result<(), Box<dyn std::error::Error>> {
+    fn execute_commands(&self, delay: u64) -> Result<(), Box<dyn std::error::Error>> {
+        // Wait for all panes to settle after creation and resizing
+        std::thread::sleep(std::time::Duration::from_millis(delay));
+
         for (index, pane) in self.panes.iter().enumerate() {
+            if pane.commands.is_empty() {
+                continue;
+            }
+
             // Select pane
             Command::new("tmux")
                 .args(["select-pane", "-t", &index.to_string()])
                 .status()?;
+
+            // Delay between pane selection and command execution
+            std::thread::sleep(std::time::Duration::from_millis(300));
 
             // Execute commands
             for command in &pane.commands {
